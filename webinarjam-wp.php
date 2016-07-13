@@ -2,11 +2,11 @@
 
 /*
 Plugin Name: WebinarJam for WP
-Plugin URI: http://misolutions.dk
+Plugin URI: https://github.com/dannyandersen/webinarjam-wp
 Description: This Plugin allows your website users to connect directly to your WebinarJam webinar without having to fill out their details again.
 Version: 1.0
 Author: Danny Andersen
-Author URI: http://e-vision.dk
+Author URI: http://bang-andersen.com
 License: GPL2
 */
 
