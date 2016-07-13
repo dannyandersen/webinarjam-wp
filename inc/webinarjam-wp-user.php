@@ -4,6 +4,24 @@ $current_user = wp_get_current_user();
 
 if ( is_user_logged_in() || $atts['onlyusers'] == 'no' ) {
 
+    $webinarjam_live_link = "";
+    $apiUrl = "https://app.webinarjam.com/api/v2/register";
+
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    $timeout = 30;
+    curl_setopt($ch, CURLOPT_URL, $apiUrl);
+    curl_setopt ($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_TIMEOUT,         10);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT,  $timeout );
+    curl_setopt ($ch, CURLOPT_POST, true);
+    $post = array("api_key" => $atts['api_key'], "webinar_id" => $atts['webicode'], "memberid" => $atts['memberid'], "name" => $current_user->display_name, "email" => $current_user->user_email, "schedule" => $atts['schedule'] );
+    curl_setopt ($ch,CURLOPT_POSTFIELDS,$post);
+    $result = curl_exec($ch);
+    $jamData = json_decode($result);
+//    var_dump($jamData);
+    $webinarjam_live_link = $jamData->user->live_room_url;
+
 ?>
 
 <div id="webinarjam-wp-button-wrapper" class="webinarjam-wp-button-wrapper">
@@ -40,6 +58,25 @@ if ( is_user_logged_in() || $atts['onlyusers'] == 'no' ) {
 
         (function() {
 
+            setTimeout(function() {
+                var webinarjam_live_link = "<?php echo $webinarjam_live_link ?>"
+                if ( webinarjam_live_link !== "" ) {
+                    document.getElementById("webinarjam-wp-loader-wrapper").style.display = "none";
+                    document.getElementById("webinarjamframediv").style.display = "block";
+                    document.getElementById("webinarjamframe").src = "<?php echo $webinarjam_live_link ?>";
+                }
+            }, 1000);
+            return false;
+
+        })();
+
+    </script>
+
+
+    <script type="text/javascript">
+
+        (function() {
+
             document.getElementById("webinarjam-wp-button").onclick = function() {
                 document.getElementById("webinarjam-wp-button-wrapper").style.display = "none";
                 document.getElementById("webinarjam-wp-loader-wrapper").style.display = "block";
@@ -58,8 +95,6 @@ if ( is_user_logged_in() || $atts['onlyusers'] == 'no' ) {
         })();
 
     </script>
-
-</script>
 
 <?php
 }

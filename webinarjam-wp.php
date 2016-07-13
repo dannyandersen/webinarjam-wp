@@ -15,6 +15,7 @@ License: GPL2
 function webinarjam_scode_user( $atts, $content = null ) {
     $atts = shortcode_atts(
         array(
+            'api_key' => '',
             'webicode' => '',
             'memberid' => '',
             'schedule' => '1',
