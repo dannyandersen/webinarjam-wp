@@ -63,17 +63,15 @@ if ( is_user_logged_in() || $atts['onlyusers'] == 'no' ) {
                 <td width="40%">
                     <div class="wj-input-group" >
                         <div class="input-group">
-                            <div class="webinarjam-wp-input-label">Name: </div>
-                            <input type="text" id="webinarjam_wp_name" name="webinarjam_wp_name" class="webinarjam-wp-input" value="<?php if ( is_user_logged_in() ) { echo $current_user->display_name; } ?>" required="" autofocus="">
+                            <span class="fontawesome-user"></span><input type="text" id="webinarjam_wp_name" name="webinarjam_wp_name" class="webinarjam-wp-input" value="<?php if ( is_user_logged_in() ) { echo $current_user->display_name; } ?>" required="" autofocus="">
                         </div>
 
                         <div class="input-group">
-                            <div class="webinarjam-wp-input-label">Email: </div>
-                            <input type="text" id="webinarjam_wp_email" name="webinarjam_wp_email" class="webinarjam-wp-input" value="<?php if ( is_user_logged_in() ) { echo $current_user->user_email; } ?>" required="">
+                            <span class="fontawesome-envelope-alt"></span><input type="text" id="webinarjam_wp_email" name="webinarjam_wp_email" class="webinarjam-wp-input" value="<?php if ( is_user_logged_in() ) { echo $current_user->user_email; } ?>" required="">
                         </div>
                     </div>
 
-                    <div id="webinarjam-wp-button" type="button" class="webinarjam-wp-button" ><?php echo $atts['buttontext'] ?></div>
+                    <input id="webinarjam-wp-button" type="submit" class="webinarjam-wp-button" value="<?php echo $atts['buttontext'] ?>" ></input>
                 </td>
                 <td width="30%"></td>
         </tr></table>
@@ -91,15 +89,23 @@ if ( is_user_logged_in() || $atts['onlyusers'] == 'no' ) {
 
         (function() {
 
+            var webinarjam_live_link = "<?php echo $webinarjam_live_link ?>";
+
+            if ( webinarjam_live_link !== "" ) {
+                var wnd = window.open('https://app.webinarjam.net/auto-register?webicode=<?php echo $atts['webicode'] ?>&memberid=<?php echo $atts['memberid'] ?>&firstname=<?php echo $webinarjam_wp_to_api_name ?>&email=<?php echo $webinarjam_wp_to_api_email ?>&schedule=<?php echo $atts['schedule'] ?>', '_blank', 'toolbar=no,status=no,menubar=no,scrollbars=no,resizable=no,left=10000, top=10000, width=1, height=1, visible=none');
+                setTimeout(function () {
+                    wnd.close();
+                }, 5000);
+            }
+
             setTimeout(function() {
-                var webinarjam_live_link = "<?php echo $webinarjam_live_link ?>"
                 if ( webinarjam_live_link !== "" ) {
                     document.getElementById("webinarjam-wp-loader-wrapper").style.display = "none";
                     document.getElementById("webinarjam-wp-button-wrapper").style.display = "none";
                     document.getElementById("webinarjamframediv").style.display = "block";
                     document.getElementById("webinarjamframe").src = "<?php echo $webinarjam_live_link ?>";
                 }
-            }, 1000);
+            }, 6000);
             return false;
 
         })();
